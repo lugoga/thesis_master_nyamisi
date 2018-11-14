@@ -1,4 +1,0 @@
-"0","table1 = readxl::read_excel(""tables.xlsx"", sheet = 1)"
-"0","table1 %>% kable(format = ""html"", booktabs = TRUE, escape = FALSE, caption = ""Statistics of chlorophyll-a distribution pattern for the Zanzibar and Pemba channel sites during the dry and rainy seasons"") %>%"
-"0","  column_spec(column = 1:6, width = ""2cm"") %>%"
-"0","  kable_styling(position = ""center"")"

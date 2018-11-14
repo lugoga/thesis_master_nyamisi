@@ -117,10 +117,7 @@ cowplot::plot_grid(rain, dry, nrow = 1, labels = c("a)", "b)"), label_size = 12,
   
 ```
 
-The seasonal variation provide a snapshot of chlorophyll variation based on two monsoon influence. Figure \@ref(fig:fig42) show how chlorophyll-a varies with months. 
-
-
-Figure \@ref(fig:fig42) show the climatological monthly variation of Chl-a concentration in the study area. From November, the chl-a concentration decrease gradually until the maximum value in March and then began to increase and reaches its peak in August. Generally, the concentration of  Chl-a had declined from November to April and a relatively high concentration during this period was restricted to a narrow strip along the coast (Figure \@ref(fig:fig42). 
+The seasonal variation in figure \@ref(fig:fig41) provide a snapshot of chlorophyll variation based on two monsoon influence. Figure \@ref(fig:fig42) show the climatological monthly variation of Chl-a concentration in the study area. From November, the chl-a concentration decrease gradually until the maximum value in March and then began to increase and reaches its peak in August. Generally, the concentration of  Chl-a had declined from November to April and a relatively high concentration during this period was restricted to a narrow strip along the coast (Figure \@ref(fig:fig42)). 
 
 
 ```{r fig42, fig.cap="Monthly climatology of chlorophyll-a concentration within the Pemba and Zanzibar Channels", fig.width=9, fig.align="center"}
@@ -149,7 +146,7 @@ animate(anim)
 
 ```
 
-The chl-a from in-situ shows similar spatial pattern as that of satellite observation in the Pemba channel. Rain period (Figue \@ref(fig:fig42)a) has significant higher chlorophyll values than dry season (Figure \@ref(fig:fig42)b). The areas close to the Pangani River estuary have the highest concentration in both seasons (Figure \@ref(fig:fig42)a & \@ref(fig:fig42)b). While in rainy season, the Pemba channel had highest values of Chl-a close to the Pangani river mouth (Figure \@ref(fig:fig43)), the dry season, there was a relatively low concentration to this area except around the river mouth and on the southern part of the Pangani river mouth (Figure \@ref(fig:fig43) which was having a relatively higher Chl-a concentration. The concentration value of chlorophyll-a was signfificant higher in rain season than the dry season (Table \@ref(tab:tab41)).
+The chl-a from in-situ shows similar spatial pattern as that of satellite observation in the Pemba channel. Rain period (Figue \@ref(fig:fig43)a) has significant higher chlorophyll values than dry season (Figure \@ref(fig:fig42)b). The areas close to the Pangani River estuary have the highest concentration in both seasons (Figure \@ref(fig:fig43)a & \@ref(fig:fig43)b). While in rainy season, the Pemba channel had highest values of Chl-a close to the Pangani river mouth (Figure \@ref(fig:fig43)), the dry season, there was a relatively low concentration to this area except around the river mouth and on the southern part of the Pangani river mouth (Figure \@ref(fig:fig43) which was having a relatively higher Chl-a concentration. The concentration value of chlorophyll-a was signfificant higher in rain season than the dry season (Table \@ref(tab:tab41)).
 
 ```{r}
 pangani = read_csv("pangani.csv")
@@ -234,6 +231,16 @@ int.se = ggplot() +
 
 cowplot::plot_grid( int.se, int.ne, labels = c("a)", "b)"), label_x = .85, label_y = .85, label_fontface = "plain", label_size = 12)
 
+
+```
+
+```{r tab41}
+table1 = readxl::read_excel("tables.xlsx", sheet = 1)
+
+
+table1 %>% kable(format = "html", booktabs = TRUE, escape = FALSE, caption = "Statistics of chlorophyll-a distribution pattern for the Zanzibar and Pemba channel sites during the dry and rainy seasons") %>%
+  column_spec(column = 1:6, width = "2cm") %>%
+  kable_styling(position = "center")
 
 ```
 
@@ -327,7 +334,7 @@ chl.se.zanzibar = data.frame(lon, chl.t %>% as.data.frame()) %>%
 ```
 
 
-```{r fig45, fig.cap="Spatial distribution pattern of in situ chlorophyll-a at the Zanzibar channel site (a) Rainy season (b) Dry season", fig.align="center", fig.height=3.5}
+```{r fig45, fig.cap="Spatial distribution pattern of in situ chlorophyll-a at the Zanzibar channel site (a) Rainy season (b) Dry season", fig.align="center", fig.height=4}
 
 int.ne = ggplot() +
   geom_raster(data = chl.ne.zanzibar, aes(x = lon, y = lat, fill = chl), interpolate = TRUE)+
@@ -366,16 +373,6 @@ cowplot::plot_grid( int.se, int.ne, nrow = 1, labels = c("a)", "b)"), label_x = 
 
 ```
 
-
-```{r tab41}
-table1 = readxl::read_excel("tables.xlsx", sheet = 1)
-
-
-table1 %>% kable(format = "html", booktabs = TRUE, escape = FALSE, caption = "Statistics of chlorophyll-a distribution pattern for the Zanzibar and Pemba channel sites during the dry and rainy seasons") %>%
-  column_spec(column = 1:6, width = "2cm") %>%
-  kable_styling(position = "center")
-
-```
 
 
 ```{r}
@@ -418,9 +415,9 @@ The results on temporal and spatial distribution of sea surface temperature (SST
 sst.climatology = sst.all %>% mutate(month = lubridate::month(date, label = TRUE, abbr = TRUE), miezi = lubridate::month(date)) %>% group_by(lon,lat, month, miezi) %>% summarise(sst = mean(sst, na.rm = TRUE))
 
 rain = ggplot() +
-  geom_raster(data = sst.climatology %>% filter(month == "Aug"), 
+  geom_raster(data = sst.climatology %>% filter(month == "Jan"), 
               aes(x = lon, y = lat, fill = sst), interpolate = FALSE) +
-  scale_fill_gradientn(colours = oce::oceColors9A(120), na.value = NA, guide = "colorbar")+
+  scale_fill_gradientn(limits = c(25,30),colours = oce::oceColors9A(120), na.value = NA, guide = "colorbar")+
   geom_sf(data = tanzania, fill = "gray70", col = 1) +
   coord_sf(xlim = c(38.5,40), ylim = c(-6.8,-4.7)) +
   theme_bw()+
@@ -431,9 +428,9 @@ rain = ggplot() +
   labs(x = NULL, y = NULL)
 
 dry = ggplot() +
-  geom_raster(data = sst.climatology %>% filter(month == "Jan"), 
+  geom_raster(data = sst.climatology %>% filter(month == "Aug"), 
               aes(x = lon, y = lat, fill = sst), interpolate = FALSE) +
-  scale_fill_gradientn(colours = oce::oceColors9A(120), na.value = NA, guide = "colorbar")+
+  scale_fill_gradientn(limits = c(25,30),colours = oce::oceColors9A(120), na.value = NA, guide = "colorbar")+
   geom_sf(data = tanzania, fill = "gray70", col = 1) +
   coord_sf(xlim = c(38.5,40), ylim = c(-6.8,-4.7)) +
   theme_bw()+
@@ -443,17 +440,15 @@ dry = ggplot() +
   scale_y_continuous(breaks = seq(-6.8,-4.7, length.out = 4) %>% round(2))+
   labs(x = NULL, y = NULL)
 
-cowplot::plot_grid(rain, dry, nrow = 1, labels = c("a)", "b)"), label_size = 12, label_fontface = "plain", label_x = .15, label_y = .90)
+cowplot::plot_grid(rain, dry, nrow = 1, labels = c("a)", "b)"), label_size = 12, label_fontface = "plain", label_x = .15, label_y = .95)
  
 ```
 
 ## Chlorophyll-a and Sea Surface Temperature Variation
-Figure \@ref(fig:fig47) show climatological monthly mean variation of Chl-*a* and SST for the study area (Figure \@ref(fig:fig31)a & \@ref(fig:fig31)b) . SST and chl-a revealed a complete inverse relation. There was a decrease in Chl-a concentration from January to March when the SST increased, and the Chl-a concentration increased from April and May and at this time the SST decreased. There were a slightly decrease in Chl-a on June whilst the SST marginally increased. When the Chl-a concentration started to increase again from June to August, there was a decrease in SST, and the Chl-a decrease from September to December and during this period SST was very high.
-
-The mean Chl-a concentration displayed a bimodal distribution with a high peak in April-May and in July-August (Figure \@ref(fig:fig47). Kruskal-Wallis ANOVA (KWANOVA) test showed a significant difference in Chl-a (H = 66.23, 11 d.f, p < 0.05) and SST (H = 244.27, 11 d.f, p < 0.05) variation among months.
+Figure \@ref(fig:fig47) show climatological monthly mean variation of Chl-*a* and SST for the study area (Figure \@ref(fig:fig31) & \@ref(fig:fig32)) . SST and chl-*a* revealed a complete inverse relation. There was a decrease in Chl-*a* concentration from January to March when the SST increased, and the Chl-*a* concentration increased from April and May and at this time the SST decreased. There were a slightly decrease in Chl-*a* on June whilst the SST marginally decreased and the Chl-a decrease from September to December and during this period SST was very high. 
 
 
-```{r fig47, fig.cap="Monthly mean climatology of a) chlorophyll-a and b) sea surface temperature for Pemba and Zanzibar Channel", fig.align="center", fig.height=4, fig.width=5}
+```{r fig47, fig.cap="Monthly mean climatology of a) chlorophyll-a and b) sea surface temperature for Pemba and Zanzibar Channel", fig.align="center", fig.height=4, fig.width=8.5}
 
 monthly.mean = sst.climatology %>% group_by(month) %>% summarise(sst = mean(sst,na.rm = TRUE)) %>% bind_cols(chl.climatology %>% group_by(month) %>% summarise(chl = mean(chl,na.rm = TRUE))) %>% select(-month1) %>% mutate(date = seq(lubridate::dmy(010118), lubridate::dmy(011218), by = "month")) %>% gather(key = "variables", value = "values", 2:3)
 
@@ -461,9 +456,7 @@ chl.plot = ggplot(data = monthly.mean %>% filter(variables == "chl"),
             aes(x = date, y = values)) +
   geom_line() +
   geom_point(size = 2) +
-  theme_bw() +
-  theme(panel.background = element_rect(fill = NULL),
-        panel.grid = element_blank(),
+  theme(panel.background = element_rect(colour = 1),
         axis.text = element_text(size = 11),
         axis.title = element_text(size = 12))+
   scale_x_date(date_breaks = "1 month", date_labels = "%b") +
@@ -474,9 +467,7 @@ sst.plot = ggplot(data = monthly.mean %>% filter(variables == "sst"),
             aes(x = date, y = values)) +
   geom_line() +
   geom_point(size = 2) +
-  theme_bw() +
-  theme(panel.background = element_rect(fill = NULL),
-        panel.grid = element_blank(),
+  theme(panel.background = element_rect(colour = 1),
         axis.text = element_text(size = 11),
         axis.title = element_text(size = 12))+
   scale_x_date(date_breaks = "1 month", date_labels = "%b") +
@@ -487,7 +478,31 @@ cowplot::plot_grid(chl.plot,sst.plot, nrow = 2, labels = c("a)", "b)"), label_x 
 
 ```
 
-The correlation between satellite SST and satellite Chl-a was then calculated using Pearson’s correlation analysis. There was a strong inverse correlation between satellite SST and Chl-a (Figure \@ref(fig:fig48)), and this was found to be statistically significant (r = -0.90, p < 0.05). 
+ The mean Chl-a concentration displayed a bimodal distribution with first peak on May and the second high peak in April-May and in July-August (Figure \@ref(fig:fig47a). Figure \@ref(fig:fig47a) is similar to figure \@ref(fig:fig47), but combine the sea surface temperature and chlorophyll-a value on the same plot and the inverse relation between sst and chl become apparent. The month with high SST experience low chl and viceversa. Kruskal-Wallis ANOVA (KWANOVA) test showed a significant difference in Chl-a over the twelve climatological months (*H* = 66.23, 11 d.f, *p* < 0.05) and SST (*H* = 244.27, 11 d.f, *p* < 0.05) variation among months.
+
+```{r fig47a, fig.cap="Monthly mean climatology of a) chlorophyll-a and b) sea surface temperature for Pemba and Zanzibar Channel", fig.align="center", fig.height=3.0, fig.width=8.5}
+
+ggplot() +
+  geom_line(data = monthly.mean %>% filter(variables == "sst"),
+            aes(x = date, y = values, colour = variables), size = 1.2)+
+    geom_line(data = monthly.mean %>% filter(variables == "chl"),
+            aes(x = date, y = values*100, colour = variables), size = 1.2)+
+  scale_y_continuous(name = expression(~Temperature~(~degree~C)), 
+                     sec.axis = sec_axis(~./100, name = expression(~Chlorophyll-a~(~mgm^{-3})))) +
+  theme(panel.background = element_rect(colour = 1),
+        legend.position = c(0.85,.90),
+        legend.direction = "horizontal",
+        legend.background = element_blank(),
+        axis.text = element_text(size = 11),
+        axis.title = element_text(size = 12),
+        legend.text = element_text(size = 11),
+        panel.grid.minor = element_blank()) +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b")+
+  scale_colour_discrete(name = "")+
+  labs( x = "")
+```
+
+The Pearson correlation between satellite SST and satellite Chl-*a* showed a strong inverse relation between satellite SST and Chl-*a* (Figure \@ref(fig:fig48)), which was significant (r = -0.70, p < 0.05). 
 
 ```{r fig48, fig.cap="Correlation between mean monthly satellite Sea Surface Temperature and chlorophyll-a concentration within the study area", fig.width=3.5, fig.height=3.5, fig.align="center"}
 
@@ -506,7 +521,7 @@ ggplot(data = modis.chl.sst %>% filter(between(chl,0.1, 0.4)), aes(x = sst, y = 
 ```
  
 ###	Seasonal Variation of Chlorophyll-a Concentration
-The variation of Chl-a concentration in the study region was observed during the dry and the rainy seasons. For the purpose of this study, March through June was considered as the rainy season while January, February, July, August, September, October, November and December was considered the dry season.  Considering the in situ seasonal Chl-a variations between seasons at Zanzibar and Pemba channels,  the concentration was relatively higher at both study sites during the rainy season, with  an average Chl-a concentration of above 0.31 mg/m3 compared to dry season, in which the Chl-a concentration was observed to be below 0.06 mg/m3 (Figure \@ref(fig:fig49). The results revealed that the variation of the in situ Chl-a concentration between seasons was statistically significant (U= 19, 1d.f., p = 9.15 × 10-21).
+The variation of Chl-*a* concentration in the study region was observed during the dry (SE monsoon) and the rainy (NE monsoon) seasons. Considering the in situ seasonal Chl-a variations between seasons at Zanzibar and Pemba channels,  the concentration was relatively higher at both study sites during the rainy season, with  an average Chl-a concentration of above 0.31 mgm^-3^ compared to dry season, in which the Chl-a concentration was observed to be below 0.06 mgm^-3^ (Figure \@ref(fig:fig49). The results revealed that the variation of the in situ Chl-*a* concentration between seasons was significant (*U*= 19, 1d.f., *p* < 0.05).
 
 
 ```{r fig49, fig.width=5, fig.cap="The mean in situ chlorophyll-a concentration with standard error of the mean between Zanzibar and Pemba channel sites during the dry and rainy seasons", fig.align="center"}
@@ -546,8 +561,7 @@ insitu %>% group_by(season, site) %>%
 
 ```
 
-Considering the Chl-a concentration between sites and among seasons, Zanzibar channel had slightly higher concentration compared to the Pemba channel site in both dry and rainy seasons (Figure 13), and this was found to be statistically significant (F3, 116=16.96, p = 3.36×10-9). This difference in Chl-a concentration between sites and among seasons was further analysed using Bonferroni means comparison test. It was observed that 
-Chl-a concentration between different seasons and among different sites was statistically significant, except for between sites in the same season (Table \@ref(tab:tab42))
+Considering the Chl-a concentration between sites and among seasons, Zanzibar channel had slightly higher concentration compared to the Pemba channel site in both dry and rainy seasons (Figure \@ref(fig:fig49),  which was  significant (F_{3, 116}_=16.96, *p* < .05). This difference in Chl-a concentration between sites and among seasons was further analysed using Bonferroni means comparison test. It was observed that Chl-a concentration between different seasons and among different sites was statistically significant, except for between sites in the same season (Table \@ref(tab:tab42))
 
 
 ```{r tab42}
@@ -561,20 +575,65 @@ table %>% kable(format = "html", booktabs = TRUE, escape = FALSE, caption = "The
 ```
 
 
-##	Variation of Chlorophyll-a Concentration Between Transects
-Comparison of the concentration of in situ Chl-a between transects revealed considerable variation between different transects. At the Pemba channel site, the values of Chl-a during the rainy season were relatively higher at transect 2 compared to transects 1 and 3. The average Chl-a concentration for transect 2 was generally above 0.5 mg/m3, while the average Chl-a concentration for transects 1 and 3 was generally  below 0.26 mg/m3 (Figure 14).  During the dry season, the concentration of Chl-a was relatively very low at all the three transects (Figure 14).
-
-At the Zanzibar channel site during the rainy season, the concentration of Chl-a was relatively higher for transect 3, with a mean concentration of above 0.48 mg/m3 compared to transects 1 and 2 that were observed to have mean concentration below 0.36 mg/m3 (Figure 14). Similar to the Pemba channel site, the concentration of Chl-a at the Zanzibar site during the dry season, was relatively very low for all the three transects (Figure 14).
+##	Variation of Between Transects
+Insitu chl-*a* concentration revealed considerable variation between  seasons and among transects. At the Pemba channel, the values of Chl-*a* were relatively higher at transect 2 compared to transects 1 and 3 during the rainy season. The average Chl-*a* concentration for transect 2 was generally above 0.5 mgm^-3^, while the average Chl-a concentration for transects 1 and 3 was generally  below 0.26 mg/m3 (Figure \@ref(fig:fig420)).  During the dry season, the concentration of Chl-*a* was relatively very low at all the three transects (Figure \@ref(fig:fig420)a) compared with the wet season (Figure \@ref(fig:fig420)b).
 
 
+```{r fig420, fig.cap ="The mean and error of chlorophyll-a concentration and variation between transects within the study sites during a) dry season and b) wet season", fig.height=2.5, fig.width=7.5, fig.align="center"}
 
+ pangani.wet =  pangani%>%filter(season == "Wet")%>%mutate(transect = rep(c(1,2,3), each = 10)) %>% group_by(site,transect, season) %>% summarise(error = sd(chl)/sqrt(30), mean = mean(chl))
 
+zanzibar.wet = zanzibar%>%filter(season == "Wet")%>%mutate(transect = rep(c(1,2,3), each = 10)) %>% group_by(site,transect, season) %>% summarise(error = sd(chl)/sqrt(30), mean = mean(chl))
 
+wet.stats = pangani.wet %>% bind_rows(zanzibar.wet)
  
-Figure 14: The mean chlorophyll-a concentration and variation between transects within the study sites. (a) Pemba channel site rainy season (b) Zanzibar channel site rainy season (c) Pemba channel site dry season (d) Zanzibar channel site dry season. Note that the scale is different, especially between (a) & (b) vs (c) and (d).
+  wet.chl = ggplot(data = wet.stats ,aes(x = transect, y = mean, col = site))+
+     geom_line(size = .5)+
+     geom_errorbar(aes(ymin = mean-error, ymax = mean+error), width = .075)+
+     geom_point(aes(x = transect, y = mean), size = 4) +
+     theme(legend.direction = "horizontal",
+           panel.background = element_rect(colour = 1),
+           panel.grid.minor = element_blank(),
+           legend.position = "none",
+           legend.background = element_blank(),
+           axis.text = element_text(size = 11), 
+           axis.title = element_text(size = 12),
+           legend.text = element_text(size = 10))+
+     scale_color_discrete(name = "")+
+     scale_x_continuous(breaks = 1:3, labels = c("TR1", "TR2", "TR3"))+
+     labs(x = NULL, y = expression(~Chlorophyll~(~mgm^{-3})))
+   
+   
+   
+   
+pangani.dry =  pangani%>%filter(season == "Dry")%>%mutate(transect = rep(c(1,2,3), each = 10)) %>% group_by(site,transect, season) %>% summarise(error = sd(chl)/sqrt(30), mean = mean(chl))
 
+zanzibar.dry = zanzibar%>%filter(season == "Dry")%>%mutate(transect = rep(c(1,2,3), each = 10)) %>% group_by(site,transect, season) %>% summarise(error = sd(chl)/sqrt(30), mean = mean(chl))
 
-This variation in Chl-a concentration among transects showed a difference statistically at the Pemba channel site during the rainy season only and there was no significant difference in Chl-a concentration among transects during the dry season for the Pemba site and at the Zanzibar site in both seasons (Table \@ref(tab:tab43)).
+dry.stats = pangani.dry %>% bind_rows(zanzibar.dry)
+
+ dry.chl = ggplot(data = dry.stats ,aes(x = transect, y = mean, col = site))+
+     geom_line(size = .5)+
+     geom_errorbar(aes(ymin = mean-error, ymax = mean+error), width = .075)+
+     geom_point(aes(x = transect, y = mean), size = 4) +
+     theme(legend.direction = "vertical",
+           panel.background = element_rect(colour = 1),
+           panel.grid.minor = element_blank(),
+           legend.position = c(.5,.9),
+           legend.background = element_blank(),
+           axis.text = element_text(size = 11), 
+           axis.title = element_text(size = 12),
+           legend.text = element_text(size = 10))+
+     scale_color_discrete(name = "")+
+     scale_x_continuous(breaks = 1:3, labels = c("TR1", "TR2", "TR3"))+
+     labs(x = NULL, y = expression(~Chlorophyll~(~mgm^{-3})))
+ 
+ 
+  cowplot::plot_grid(dry.chl, wet.chl, labels = c("a)", "b)"), label_x = .25, label_y = .95, label_fontface = "plain", label_size = 12)
+
+```
+
+At the Zanzibar channel site during the rainy season, the concentration of Chl-a was relatively higher for transect 3, with a mean concentration of above 0.48 mgm^-3^ compared to transects 1 and 2 that were observed to have mean concentration below 0.36 mgm^-3^ (Figure \@ref(fig:fig420)). Similar to the Pemba channel site, the concentration of Chl-a at the Zanzibar site during the dry season, was relatively very low for all the three transects (Figure \@ref(fig:fig420)a). This variation in Chl-a concentration among transects showed a difference statistically at the Pemba channel site during the rainy season only and there was no significant difference in Chl-a concentration among transects during the dry season for the Pemba site and at the Zanzibar site in both seasons (Table \@ref(tab:tab43)).
 
 
 ```{r tab43}
@@ -591,8 +650,6 @@ table %>% kable(format = "html", booktabs = TRUE, escape = FALSE,
 
 The difference in Chl-a concentration at the Pemba channel site during the rainy season was further analysed using Bonferroni Post-hoc means comparison test. It was found that Chl-a concentration was statistically significant between transects 2 and 1 and transects 3 and 2; whereas, there was no significant difference in Chl-a concentration between transects 3 and 1(Table \@ref(tab:tab44)).
 
-
-
 ```{r tab44}
 table = readxl::read_excel("tables.xlsx", sheet = 4)
 
@@ -608,7 +665,6 @@ table %>% kable(format = "html", booktabs = TRUE, escape = FALSE,
 
 ##	The Physical-chemical Variables
 The temporal and spatial distribution of physico-chemical variables depends on the season and study sites. The value of physico-chemical variables at Zanzibar channel site during the rainy and dry seasons are shown in Tables \@ref(tab:tab45) and \@ref(tab:tab46).
-
 
 ```{r tab45}
 table = readxl::read_excel("tables.xlsx", sheet = 5)
@@ -771,4 +827,6 @@ dry.com = ggplot(data = compare %>% filter(season == "dry"), aes(x = x, y = y))+
 
 cowplot::plot_grid(dry.com, rain.com, nrow = 1, labels = c("a)", "b)"), label_x = .25, label_y = .95, label_size = 12, label_fontface = "plain")
 ```
+
+
 
