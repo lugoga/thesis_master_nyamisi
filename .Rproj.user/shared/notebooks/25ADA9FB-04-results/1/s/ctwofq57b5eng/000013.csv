@@ -1,0 +1,4 @@
+"0","cowplot::plot_grid(rain, dry, nrow = 1, labels = c(""a)"", ""b)""), label_size = 12, label_fontface = ""plain"", label_x = .15, label_y = .90)
+"
+"2","Removed 889 rows containing missing values (geom_raster)."
+"2","Removed 889 rows containing missing values (geom_raster)."

@@ -1,0 +1,6 @@
+"0","load(""modis_chl.RData"")"
+"0","lat = sst$latitude"
+"0","lon = sst$longitude"
+"0","time = sst$time %>% as.Date()"
+"0","data = sst$data"
+"0","length.lon = length(lon)"

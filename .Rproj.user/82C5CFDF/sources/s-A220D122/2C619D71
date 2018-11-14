@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1541926489987.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "2C619D71",
+    "lastKnownWriteTime" : 1541985198,
+    "last_content_update" : 1541985198155,
+    "path" : "E:/bookdown/thesis_nyamisi/02-literature.Rmd",
+    "project_path" : "02-literature.Rmd",
+    "properties" : {
+        "cursorPosition" : "73,669",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

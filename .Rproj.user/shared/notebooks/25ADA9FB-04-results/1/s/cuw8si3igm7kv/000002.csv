@@ -1,0 +1,26 @@
+"0","zanzibar = read_csv(""Zanzibar.csv"")"
+"2","Parsed with column specification:
+cols(
+  LATITUDE = col_double(),
+  LONGITUDE = col_double(),
+  `SST NE` = col_double(),
+  `pH NE` = col_double(),
+  `SALINITY NE` = col_double(),
+  `DO NE` = col_double(),
+  `chlo NE` = col_double(),
+  `PO4 NE` = col_double(),
+  `Nitrate NE` = col_double(),
+  `SST SE` = col_double(),
+  `Ph SE` = col_double(),
+  `SALINITY SE` = col_double(),
+  `DO SE` = col_double(),
+  `chlo SE` = col_double(),
+  `PO4 SE` = col_double(),
+  `Nitrate SE` = col_double()
+)
+"
+"0","ne = zanzibar %>% select(1:9) %>% "
+"0","  rename(lon = 1, lat = 2, sst = 3, pH = 4, salinity = 5, do = 6, chl = 7, po4=8, nitrate = 9)"
+"0","se = zanzibar %>% select(1:2, 10:16)%>% "
+"0","  rename(lon = 1, lat = 2, sst = 3, pH = 4, salinity = 5, do = 6, chl = 7, po4=8, nitrate = 9)"
+"0","zanzibar = ne %>% bind_rows(se)%>% mutate(season = rep(c(""NE"", ""SE""), each = 30))"

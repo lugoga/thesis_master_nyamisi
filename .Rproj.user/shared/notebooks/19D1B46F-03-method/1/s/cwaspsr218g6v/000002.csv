@@ -1,0 +1,6 @@
+"0","#read Africa continental shapefile that we will use throught the munuscript as basemap dataset for maps"
+"0","africa = read_sf(""E:/GIS/Tanzania spatial data Bank/EAF14 Tanzania spatial datasets/africa/Spatial/AdmInfr/afcntry.shp"")"
+"0","# clean the file"
+"0","tanzania = africa%>%select(-c(FIPS_CNTRY, REGIONA, EMPTY, EMPTY2))%>%"
+"0","  filter(CNTRY_NAME == ""Tanzania"" | CNTRY_NAME == ""Kenya"")"
+"0","point = read_csv(""point.csv"")"
