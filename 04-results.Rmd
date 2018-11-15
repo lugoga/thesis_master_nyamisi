@@ -12,6 +12,7 @@ require(sf)
 require(gganimate)
 require(oce)
 require(kableExtra)
+require(factoextra)
 ```
 
 ```{r}
@@ -664,7 +665,7 @@ table %>% kable(format = "html", booktabs = TRUE, escape = FALSE,
 
 
 ##	The Physical-chemical Variables
-The temporal and spatial distribution of physico-chemical variables depends on the season and study sites. The value of physico-chemical variables at Zanzibar channel site during the rainy and dry seasons are shown in Tables \@ref(tab:tab45) and \@ref(tab:tab46).
+The temporal and spatial distribution of physico-chemical variables depends on the season and study sites. The value of physico-chemical variables at Zanzibar channel site during the rainy and dry seasons are shown in Tables \@ref(tab:tab45) and \@ref(tab:tab46), respectively.
 
 ```{r tab45}
 table = readxl::read_excel("tables.xlsx", sheet = 5)
@@ -716,10 +717,71 @@ table %>% kable(format = "html", booktabs = TRUE, escape = FALSE,
 
 ```
 
-##	Correlation Between in situ Chlorophyll-a and Physico-chemical Variables
-The influence the physico-chemical variables on the distribution and abundance of phytoplankton were assessed by comparing the  in situ Chl-a concentration with the physico-chemical variables using Pearson product-moment correlation (r) and multiple linear regression analyses. The results revealed that, during the dry season, nitrate, phosphate and DO were positively and significantly correlated with the Chl-a, suggesting that the increase in these physico-chemical variables favoured phytoplankton biomass and abundance. Salinity was negatively and significantly correlated with Chl-a concentration, indicating that the increase in this variable tends to decrease Chl-a concentration (Table \@ref(tab:tab49)). The pH and SST showed a weak relationship with 
-Chl-a (Table \@ref(tab:tab49)).
+## Influence of Environmental variables on Chlorophyll-*a* 
+The influence of the physico and chemical variables on the distribution and abundance of phytoplankton at the Pemba and Zanzibar channel during the dry and wet seasons was assessed multivariate data analysis methods with principal component analysis (PCA). During the rain seasone chlorophyll was positively related with phosphate, dissolved oxygen, nitrate and pH and negatively related with salinity and SST (Figure \@ref(fig:fig421)a). the influence of these variables vary with channel. While nitrate, and pH posivitely related with chlorophyll at Zanzibar channel, oxygen and phosphate have strong influence in the Pemba channel (Figure \@ref(fig:fig421)a). SST negatively infuenced chlorophyll during the rain season at Pemba channel and salinity affected chlorophyll negatively in Pemba and Zanzibar channel (Figure \@ref(fig:fig421)a). Like the rain season, the same environmental variables influenced chlorophyll concentration but in the reversed order (Figure \@ref(fig:fig421)b). Except for SST, that influenced chlorophyll negatively during the dry season, dissolved oxygen, nitrate, phosphate, pH, and salinity showed a positive influence with chlorophyll (Figure \@ref(fig:fig421)b)
 
+
+```{r fig421, fig.height=6, fig.align="center", fig.cap="Principal Component Analysis (PCA) of the infulence of environmental variables on chlorophyll in Pemba and Zanzibar channels during the a) rain and b) dry seasons"}
+# rm(list = setdiff(ls(), c("pangani", "zanzibar")))
+
+pemba.zanzibar = pangani %>% mutate(site = "Pemba") %>% bind_rows(zanzibar %>% mutate(site = "Zanzibar"))
+
+dry.season = pemba.zanzibar %>% filter(season == "Dry")
+
+ne.pca = dry.season %>% 
+  select(3:9) %>% 
+  prcomp(scale. = TRUE)
+
+dry.fv = fviz_pca_biplot(ne.pca, 
+                repel = TRUE, 
+                geom.ind =  "point", 
+                col.var = "black",
+                col.ind = 'cos2',   
+                habillage = dry.season$site, 
+                addEllipses = TRUE, 
+                ellipse.level=0.5) + 
+  theme(panel.background = element_rect(colour = 1, fill = "grey95"),
+        panel.grid = element_line(colour = "white"),
+        axis.text = element_text(size = 11),
+        axis.title = element_text(size = 12),
+        legend.position = "none") + 
+  coord_equal()+
+  labs(title = "") +
+  scale_y_continuous(limits = c(-3,2))
+
+wet.season = pemba.zanzibar %>% filter(season == "Wet")
+
+se.pca = wet.season %>% 
+  select(3:9) %>% 
+  prcomp(scale. = TRUE)
+
+wet.fv = fviz_pca_biplot(se.pca, 
+                repel = TRUE, 
+                geom.ind =  "point", 
+                col.var = "black",
+                col.ind = 'cos2',   
+                habillage = wet.season$site, 
+                addEllipses = TRUE, 
+                ellipse.level=0.5) + 
+  theme(panel.background = element_rect(colour = 1, fill = "grey95"),
+        panel.grid = element_line(colour = "white"),
+        axis.text = element_text(size = 11),
+        axis.title = element_text(size = 12),
+        legend.position = c(.2,.18),
+        legend.text = element_text(size = 10)) + 
+  coord_equal()+
+  labs(title = "") +
+  scale_y_continuous(limits = c(-3,3))+
+  scale_color_discrete(name = "Channel")+
+  scale_shape_discrete(name = "Channel")+
+  scale_fill_discrete(name = "Channel")
+
+
+cowplot::plot_grid(dry.fv, wet.fv, nrow = 1, labels = c("a)", "b)"), label_x = .15, label_y = .75, label_size = 12, label_fontface = "plain")
+
+```
+
+The results revealed that, during the dry season, nitrate, phosphate and DO were positively and significantly correlated with the Chl-a, suggesting that the increase in these physico-chemical variables favoured phytoplankton biomass and abundance. Salinity was negatively and significantly correlated with Chl-a concentration, indicating that the increase in this variable tends to decrease Chl-a concentration (Table \@ref(tab:tab49)). The pH and SST showed a weak relationship with Chl-a (Table \@ref(tab:tab49)).
 
 ```{r tab49}
 table = readxl::read_excel("tables.xlsx", sheet = 9)
@@ -827,6 +889,7 @@ dry.com = ggplot(data = compare %>% filter(season == "dry"), aes(x = x, y = y))+
 
 cowplot::plot_grid(dry.com, rain.com, nrow = 1, labels = c("a)", "b)"), label_x = .25, label_y = .95, label_size = 12, label_fontface = "plain")
 ```
+
 
 
 

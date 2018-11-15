@@ -5,7 +5,7 @@ bookdown::gitbook:
       before: |
         <li><a href="./">The spatial distribution of phytoplankton in Pemba and Zanzibar Channel</a></li>
       after: |
-        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+        <li><a href="https://github.com/lugoga/thesis_master_nyamisi" target="blank">Published with bookdown</a></li>
     download: ["pdf", "epub"]
 bookdown::pdf_book:
   includes:
